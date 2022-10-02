@@ -5,6 +5,7 @@ import { StudentRollState } from "../entity/student-roll-state.entity"
 import { CreateRollInput, UpdateRollInput } from "../interface/roll.interface"
 import { CreateStudentRollStateInput, UpdateStudentRollStateInput } from "../interface/student-roll-state.interface"
 import { map } from "lodash"
+import { stringify } from "querystring"
 
 export class RollController {
   private rollRepository = getRepository(Roll)
@@ -16,11 +17,11 @@ export class RollController {
 
   async createRoll(request: Request, response: Response, next: NextFunction) {
     const { body: params } = request
-
-    const createRollInput: CreateRollInput = {
+    let rollObject: CreateRollInput = {
       name: params.name,
       completed_at: params.completed_at,
     }
+    const createRollInput: CreateRollInput = rollObject
     const roll = new Roll()
     roll.prepareToCreate(createRollInput)
     return this.rollRepository.save(roll)
